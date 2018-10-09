@@ -1,0 +1,210 @@
+<html>
+
+<head>
+  <title>Canvas javascript api demo</title>
+  <style type="text/css">
+    canvas {
+      border: 1px #000 solid;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas height="600" id="canvas" width="600">this browser does not support canvas...</canvas>
+
+  <div id="showarea">
+  </div>
+  <div id="menu">
+    <input onclick="start()" type="button" value="reStart" />
+    <input onclick="resume()" type="button" value="resume" />
+    <input onclick="stop()" type="button" value="stop" />
+
+    <input onclick="swapControlCamera()" type="button" value="swapControlCamera" />
+    <input onclick="swapViewCamera()" type="button" value="swapViewCamera" />
+    <input onclick="autoRotate()" type="button" value="autoRotate" />
+    按鍵:wrsedf 上下左右
+  </div>
+  <script src="Vecor3D.js" charset="utf-8"></script>
+  <script src="Triangle3D.js" charset="utf-8"></script>
+  <script src="Tool.js" charset="utf-8"></script>
+  <script src="Camera3D.js" charset="utf-8"></script>
+  <script src="Box3D.js" charset="utf-8"></script>
+  <script src="Transform3D.js" charset="utf-8"></script>
+
+
+  <script type="text/javascript">
+
+    var $ = function (id) {
+      return document.getElementById(id);
+    }
+
+    window.onload = init;
+    document.onkeydown = keyProc;
+
+    var KepMap =
+    {
+      w: 87,
+      r: 82,
+
+      e: 69,
+      d: 68,
+      s: 83,
+      f: 70,
+
+      a_up: 38,
+      a_down: 40,
+      a_left: 37,
+      a_right: 39
+    };
+
+    function keyProc(event) {
+      var moveS = 1;
+      var rotateS = 0.1;
+      switch (event.keyCode) {
+        case KepMap.w:
+          nowControlCamera.moveEye(moveS, nowControlCamera.axis_z);
+          break;
+        case KepMap.r:
+          nowControlCamera.moveEye(-moveS, nowControlCamera.axis_z);
+          break;
+
+        case KepMap.e:
+          nowControlCamera.moveEye(moveS, nowControlCamera.axis_y);
+          break;
+        case KepMap.d:
+          nowControlCamera.moveEye(-moveS, nowControlCamera.axis_y);
+          break;
+        case KepMap.s:
+          nowControlCamera.moveEye(-moveS, nowControlCamera.axis_x);
+          break;
+        case KepMap.f:
+          nowControlCamera.moveEye(moveS, nowControlCamera.axis_x);
+          break;
+
+        case KepMap.a_up:
+          nowControlCamera.addPitch(rotateS);
+          break;
+        case KepMap.a_down:
+          nowControlCamera.addPitch(-rotateS);
+          break;
+
+        case KepMap.a_left:
+          nowControlCamera.addYaw(-rotateS);
+          break;
+        case KepMap.a_right:
+          nowControlCamera.addYaw(rotateS);
+          break;
+      }
+    }
+
+    var nowViewCamera = null;
+    var nowControlCamera = null;
+    var cameraIndex_view = 1;
+    var cameraIndex_control = 0;
+    var camera = null;
+    var thandle = null;
+
+    var screenWidth = 600;
+    var screenHeight = 600;
+    var box = null;
+
+    function init() {
+
+      box = new Box3D();
+
+      camera = new Array();
+      camera[0] = new Camera3D(new Vector3D(0, -50, 20), 80, 270, 30);
+      camera[1] = new Camera3D(new Vector3D(0, -150, 20), 90, 270, 60);
+
+      nowControlCamera = camera[0];
+      nowViewCamera = camera[1];
+      start();
+    }
+
+    var last_t;
+    var sum_t;
+    var is_auto_rotate = true;
+
+    function drawScene() {
+      if (is_auto_rotate) {
+
+        var d = new Date();
+        var t = d.getTime();
+        var diff = t - last_t;
+        last_t = t;
+
+        //每6秒轉1圈
+        sum_t = sum_t + diff;
+        var T = 6000;
+        var a = (sum_t % T) / T * 2 * Math.PI;
+        camera[0].yaw = a;
+      }
+
+      camera[0].reset();
+      camera[1].reset();
+
+      clearDump();
+
+      // 清空
+      var ctx = $('canvas').getContext('2d');
+      ctx.clearRect(0, 0, screenWidth, screenHeight);
+
+      //畫立方體
+      box.update(nowViewCamera, rotateByZ(25));
+      box.draw(ctx);
+
+      box.update(nowViewCamera, offset(100, 100, 0));
+      box.draw(ctx);
+
+      box.update(nowViewCamera, offset(0, 100, 60));
+      box.draw(ctx);
+
+      camera[0].draw(nowViewCamera, ctx);
+    }
+
+    function start() {
+      stop();
+      sum_t = 0;
+      var d = new Date();
+      last_t = d.getTime();
+      thandle = setInterval(function () { drawScene(); }, 16);
+    }
+
+    function resume() {
+      var d = new Date();
+      last_t = d.getTime();
+      thandle = setInterval(function () { drawScene(); }, 16);
+    }
+
+    function stop() {
+      clearInterval(thandle);
+      thandle = null;
+    }
+
+    function swapViewCamera() {
+      cameraIndex_view = (cameraIndex_view + 1) % 2;
+      nowViewCamera = camera[cameraIndex_view];
+    }
+
+    function swapControlCamera() {
+      cameraIndex_control = (cameraIndex_control + 1) % 2;
+      nowControlCamera = camera[cameraIndex_control];
+    }
+
+    function autoRotate() {
+      var d = new Date();
+      last_t = d.getTime();
+      is_auto_rotate = !is_auto_rotate;
+    }
+
+    function clearDump() {
+      $("showarea").innerHTML = "";
+    }
+
+    function dump(str) {
+      $("showarea").innerHTML = $("showarea").innerHTML + str;
+    }
+  </script>
+</body>
+
+</html>
