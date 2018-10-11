@@ -150,11 +150,15 @@
       ctx.clearRect(0, 0, screenWidth, screenHeight);
 
       //畫立方體
-      var combineMatrix = transformTransform(rotateByZ(sum_t * degreeToRad(5)), offset(100, 0, 0));
+      var offsetMatrix = offset(100, 0, 0);
+      var rotateMatrix = rotateByZ(sum_t * degreeToRad(5));
+      var combineMatrix = transformTransform(offsetMatrix, rotateMatrix);
       box.update(nowViewCamera, combineMatrix);
       box.draw(ctx);
 
-      combineMatrix = transformTransform(offset(150, 0, 0), rotateByZ(sum_t * degreeToRad(5)));
+      var offsetMatrix = offset(150, 0, 0);
+      var rotateMatrix = rotateByZ(sum_t * degreeToRad(5));
+      combineMatrix = transformTransform(rotateMatrix, offsetMatrix);
       box.update(nowViewCamera, combineMatrix);
       box.draw(ctx);
 

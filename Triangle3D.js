@@ -39,9 +39,9 @@ Triangle3D = function (pv0, pv1, pv2) {
     this.process = function (pcamera, worldTransform) {
 
         // to world space
-        this.v0_w = transformPoint(this.v0, worldTransform);
-        this.v1_w = transformPoint(this.v1, worldTransform);
-        this.v2_w = transformPoint(this.v2, worldTransform);
+        this.v0_w = transformPoint(worldTransform, this.v0);
+        this.v1_w = transformPoint(worldTransform, this.v1);
+        this.v2_w = transformPoint(worldTransform, this.v2);
 
         // to camera space
         this.v0_c = pcamera.toCameraSpace(this.v0_w);

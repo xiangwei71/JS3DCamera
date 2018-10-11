@@ -5,7 +5,7 @@ Transform3D = function (xAxis, yAxis, zAxis, position) {
     this.position = position;
 }
 
-function transformPoint(point, transform) {
+function transformPoint(transform, point) {
     var vectorX = transform.xAxis.multiply(point.x);
     var vectorY = transform.yAxis.multiply(point.y);
     var vectorZ = transform.zAxis.multiply(point.z);
@@ -13,7 +13,7 @@ function transformPoint(point, transform) {
     return transform.position.add(vectorX).add(vectorY).add(vectorZ);
 }
 
-function transformVector(vertex, transform) {
+function transformVector(transform, vertex) {
     var vectorX = transform.xAxis.multiply(vertex.x);
     var vectorY = transform.yAxis.multiply(vertex.y);
     var vectorZ = transform.zAxis.multiply(vertex.z);
@@ -21,12 +21,12 @@ function transformVector(vertex, transform) {
     return vectorX.add(vectorY).add(vectorZ);
 }
 
-function transformTransform(inputTransform, transform) {
+function transformTransform(transform, inputTransform) {
     return new Transform3D(
-        transformVector(inputTransform.xAxis, transform),
-        transformVector(inputTransform.yAxis, transform),
-        transformVector(inputTransform.zAxis, transform),
-        transformPoint(inputTransform.position, transform),
+        transformVector(transform, inputTransform.xAxis),
+        transformVector(transform, inputTransform.yAxis),
+        transformVector(transform, inputTransform.zAxis),
+        transformPoint(transform, inputTransform.position),
     );
 }
 
