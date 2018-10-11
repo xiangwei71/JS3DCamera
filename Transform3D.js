@@ -21,12 +21,12 @@ function transformVector(vertex, transform) {
     return vectorX.add(vectorY).add(vectorZ);
 }
 
-function transfromTransform(inputTransform, transform) {
+function transformTransform(inputTransform, transform) {
     return new Transform3D(
-        Transform3D.transformVector(inputTransform.xAxis, transform),
-        Transform3D.transformVector(inputTransform.yAxis, transform),
-        Transform3D.transformVector(inputTransform.zAxis, transform),
-        Transform3D.transformPoint(inputTransform.position, transform),
+        transformVector(inputTransform.xAxis, transform),
+        transformVector(inputTransform.yAxis, transform),
+        transformVector(inputTransform.zAxis, transform),
+        transformPoint(inputTransform.position, transform),
     );
 }
 

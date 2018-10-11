@@ -126,15 +126,15 @@
     var is_auto_rotate = true;
 
     function drawScene() {
+      var d = new Date();
+      var t = d.getTime();
+      var diff = t - last_t;
+      last_t = t;
+      sum_t = sum_t + diff;
+
       if (is_auto_rotate) {
 
-        var d = new Date();
-        var t = d.getTime();
-        var diff = t - last_t;
-        last_t = t;
-
         //每6秒轉1圈
-        sum_t = sum_t + diff;
         var T = 6000;
         var a = (sum_t % T) / T * 2 * Math.PI;
         camera[0].yaw = a;
@@ -150,7 +150,12 @@
       ctx.clearRect(0, 0, screenWidth, screenHeight);
 
       //畫立方體
-      box.update(nowViewCamera, rotateByZ(25));
+      var combineMatrix = transformTransform(rotateByZ(sum_t * degreeToRad(5)), offset(100, 0, 0));
+      box.update(nowViewCamera, combineMatrix);
+      box.draw(ctx);
+
+      combineMatrix = transformTransform(offset(150, 0, 0), rotateByZ(sum_t * degreeToRad(5)));
+      box.update(nowViewCamera, combineMatrix);
       box.draw(ctx);
 
       box.update(nowViewCamera, offset(100, 100, 0));
