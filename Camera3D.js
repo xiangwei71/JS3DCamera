@@ -1,9 +1,9 @@
-Camera3D = function (peye, ppitch, pyaw, ptheda) {
+Camera3D = function (peye, ppitch, pyaw, fov) {
     this.eye = peye;
 
     this.yaw = degreeToRad(pyaw);
     this.pitch = degreeToRad(ppitch);
-    this.theda = degreeToRad(ptheda);
+    this.fov = degreeToRad(fov);
     this.ratewh = 1;//1:1
     this.nearPlaneZ = -1;
     this.farPlaneZ = -50;
@@ -51,7 +51,8 @@ Camera3D = function (peye, ppitch, pyaw, ptheda) {
     }
 
     this.updateCorner = function () {
-        var k = Math.tan(this.theda);
+        var halfFov = 0.5 * this.fov;
+        var k = Math.tan(halfFov);
 
         var x = [-1, 1];
         var y = [-1, 1];
@@ -81,7 +82,8 @@ Camera3D = function (peye, ppitch, pyaw, ptheda) {
 
     this.toScreenSpace = function (A) {
         var z = -A.z;
-        var divide = z * Math.tan(this.theda);
+        var halfFov = 0.5 * this.fov;
+        var divide = z * Math.tan(halfFov);
 
         var NDCx = A.x / divide;
         var NDCy = (-A.y) / divide;

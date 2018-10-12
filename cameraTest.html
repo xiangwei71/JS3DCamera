@@ -114,7 +114,7 @@
 
       camera = new Array();
       camera[0] = new Camera3D(new Vector3D(0, -50, 20), 80, 270, 30);
-      camera[1] = new Camera3D(new Vector3D(0, -150, 20), 90, 270, 60);
+      camera[1] = new Camera3D(new Vector3D(0, -250, 20), 90, 270, 60);
 
       nowControlCamera = camera[0];
       nowViewCamera = camera[1];
@@ -151,13 +151,15 @@
 
       //畫立方體
       var offsetMatrix = offset(100, 0, 0);
-      var rotateMatrix = rotateByZ(sum_t * degreeToRad(5));
+      var nowDegree = sum_t / 1000 * 15 % 360;
+
+      var rotateMatrix = rotateByZ(nowDegree);
       var combineMatrix = transformTransform(offsetMatrix, rotateMatrix);
       box.update(nowViewCamera, combineMatrix);
       box.draw(ctx);
 
       var offsetMatrix = offset(150, 0, 0);
-      var rotateMatrix = rotateByZ(sum_t * degreeToRad(5));
+      var rotateMatrix = rotateByZ(nowDegree);
       combineMatrix = transformTransform(rotateMatrix, offsetMatrix);
       box.update(nowViewCamera, combineMatrix);
       box.draw(ctx);
