@@ -30,6 +30,7 @@
   <script src="Camera3D.js" charset="utf-8"></script>
   <script src="Box3D.js" charset="utf-8"></script>
   <script src="Transform3D.js" charset="utf-8"></script>
+  <script src="Plane3D.js" charset="utf-8"></script>
 
 
   <script type="text/javascript">
@@ -113,7 +114,7 @@
       box = new Box3D();
 
       camera = new Array();
-      camera[0] = new Camera3D(new Vector3D(0, -50, 20), 80, 270, 30);
+      camera[0] = new Camera3D(new Vector3D(0, -50, 20), 80, 270, 60);
       camera[1] = new Camera3D(new Vector3D(0, -250, 20), 90, 270, 60);
 
       nowControlCamera = camera[0];
@@ -123,7 +124,7 @@
 
     var last_t;
     var sum_t;
-    var is_auto_rotate = true;
+    var is_auto_rotate = false;
 
     function drawScene() {
       var d = new Date();
@@ -142,8 +143,6 @@
 
       camera[0].reset();
       camera[1].reset();
-
-      clearDump();
 
       // 清空
       var ctx = $('canvas').getContext('2d');
@@ -208,13 +207,7 @@
       is_auto_rotate = !is_auto_rotate;
     }
 
-    function clearDump() {
-      $("showarea").innerHTML = "";
-    }
 
-    function dump(str) {
-      $("showarea").innerHTML = $("showarea").innerHTML + str;
-    }
   </script>
 </body>
 

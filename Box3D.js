@@ -1,7 +1,7 @@
 Box3D = function () {
     // 建立正方體頂點資料
     var triangles = new Array();
-
+    //順時針
     triangles.push(new Triangle3D(new Vector3D(-10, -10, -10), new Vector3D(10, -10, 10), new Vector3D(10, -10, -10)));
     triangles.push(new Triangle3D(new Vector3D(-10, -10, -10), new Vector3D(-10, -10, 10), new Vector3D(10, -10, 10)));
 
